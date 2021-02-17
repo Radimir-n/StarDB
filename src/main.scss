@@ -1,0 +1,12 @@
+$body-color: coral;
+
+body {
+  text-align: center;
+  background-color: $body-color;
+
+  h1 {
+    color: #123123;
+    font-size: 7vw;
+    margin-top: calc(50vh - 3.5vw);
+  }
+}
