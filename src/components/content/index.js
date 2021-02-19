@@ -8,11 +8,28 @@ export const ComponentContent = ({activePage}) => {
 
   useEffect(() => {
 
-    // setTimeout(() => { dispatch(addNewMessage('info', 'Hello1')) }, 1000)
-    // setTimeout(() => { dispatch(addNewMessage('warning', 'Hello2')) }, 1500)
-    // setTimeout(() => { dispatch(addNewMessage('error', 'Hello3')) }, 2000)
-    // setTimeout(() => { dispatch(addNewMessage('accept', 'Hello4')) }, 2500)
   }, [])
+
+  function onCreateContent(){
+    let contentArray = [
+      1,2
+    ]
+    let content = contentArray.map(item => {
+      return (
+        <div className='contentZone' key={item}>{item}
+          <ul>
+            <li>name</li>
+            <li>gender</li>
+            <li>hair</li>
+            <li>eye</li>
+            <li>birth</li>
+          </ul>
+        </div>
+      )
+    })
+    return content
+  }
+  let contentZone = onCreateContent()
   if(activePage == "Planets"){
     return (
       <div className='content'>
@@ -23,7 +40,7 @@ export const ComponentContent = ({activePage}) => {
   else if(activePage == "Person"){
     return (
       <div className='content'>
-          <h2>Content Person</h2>
+          {contentZone}
       </div>
     )
   }

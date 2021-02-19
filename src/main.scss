@@ -1,12 +1,35 @@
-$body-color: coral;
+$body-color: #272b30;
 
 body {
   text-align: center;
   background-color: $body-color;
 
-  h1 {
-    color: #123123;
+  h1,h2 {
+    color: white;
     font-size: 7vw;
     margin-top: calc(50vh - 3.5vw);
   }
+}
+button {
+  background-color: $body-color;
+  border: 1px solid black; 
+  border-bottom: none;
+  border-top: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+ul{
+  list-style:none;
+  text-align: left;
+  padding: 0,0,0,20px;
 }
