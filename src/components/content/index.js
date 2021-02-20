@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
+import * as services from '../../services/swapi-service'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faQuestion, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import './content.scss'
 export const ComponentContent = ({activePage}) => {
 
@@ -9,7 +12,6 @@ export const ComponentContent = ({activePage}) => {
 
   useEffect(() => {
 
-    
     let czList = document.getElementsByClassName('contentZone')
 
     // cz.style.zIndex = 4;
@@ -19,8 +21,10 @@ export const ComponentContent = ({activePage}) => {
     //     console.log(element)
     //   }
     // }
+    console.log(currentContent)
   }, [currentContent])
-  
+
+    
   //   cz.onclick = function() {
   //     console.log(cz)
   //   }
@@ -35,7 +39,7 @@ export const ComponentContent = ({activePage}) => {
 
   function onCreateContent(){
     let contentArray = [
-      1
+      1,3,4,5
     ]
     let content = contentArray.map(item => {
       let zIndex = 2
@@ -43,7 +47,7 @@ export const ComponentContent = ({activePage}) => {
       if(currentContent > 0){
         if(currentContent == item){
           zIndex = 4 
-          setStyle = "activeContent"
+          setStyle = "activeContent goCenter"
         }
         else{
           zIndex = 0
@@ -78,7 +82,7 @@ export const ComponentContent = ({activePage}) => {
         <div className='content'>
             {contentZone}
         </div>
-        <div className="transBox"></div>
+        <div className="transBox" onClick={() => {setCurrentContent(0)}}></div>
       </div>
     )
   }
