@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import * as services from '../../services/swapi-service'
+import Spinner from '../spinner/spinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faQuestion, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import './content.scss'
@@ -9,7 +10,14 @@ export const ComponentContent = ({activePage}) => {
   const state = useSelector(state => state)
   const dispatch = useDispatch()
   const [currentContent, setCurrentContent] = useState([])
-
+  const [data, setData] = useState([])
+  const [loading, setLodingIndicator] =useState(true)
+    function getPerson (){
+      services
+      .getAllPeople()
+      .then(setData)
+      .catch(setLodingIndicator(false));
+    }
   useEffect(() => {
 
     let czList = document.getElementsByClassName('contentZone')
@@ -21,9 +29,15 @@ export const ComponentContent = ({activePage}) => {
     //     console.log(element)
     //   }
     // }
-    console.log(currentContent)
-  }, [currentContent])
-
+    getPerson()
+    console.log(loading)
+    // asyncProcess()
+  }, [loading])
+  useEffect(() => {
+    return () => {
+      getPerson()
+    };
+  }, []);
     
   //   cz.onclick = function() {
   //     console.log(cz)
@@ -38,14 +52,16 @@ export const ComponentContent = ({activePage}) => {
 
 
   function onCreateContent(){
-    let contentArray = [
-      1,3,4,5
-    ]
-    let content = contentArray.map(item => {
+
+    console.log(data)
+    let index = 0
+    let content = data.map(item => {
+      index = index + 1
+      console.log(item.id)
       let zIndex = 2
       let setStyle = ''
       if(currentContent > 0){
-        if(currentContent == item){
+        if(currentContent == index - 1){
           zIndex = 4 
           setStyle = "activeContent goCenter"
         }
@@ -53,17 +69,30 @@ export const ComponentContent = ({activePage}) => {
           zIndex = 0
         }
       }
-      return (
-        <div id = {`zone +${item}`} className={`contentZone ${setStyle}`} key={item} onClick={() => {setCurrentContent(item)}}style = {{zIndex: zIndex}}>{item}
-          <ul>
-            <li>name</li>
-            <li>gender</li>
-            <li>hair</li>
-            <li>eye</li>
-            <li>birth</li>
-          </ul>
-        </div>
-      )
+      if(loading){
+        return (
+          // <div className = {`contentBox`} key={item}>
+            <div  className={`contentZone ${setStyle}`}  key = {index} onClick={() => {setCurrentContent(index -1)}}style = {{zIndex: zIndex}}>
+              {/* <ul> */}
+                <Spinner/>
+              {/* </ul> */}
+            </div>
+        )
+      }
+      else{
+        return (
+          // <div className = {`contentBox`} key={item}>
+            <div className={`contentZone ${setStyle}`} key = {index} onClick={() => {setCurrentContent(index - 1)}}style = {{zIndex: zIndex}}>{item.name}
+              <ul>
+                <li>gender: {item.gender}</li>
+                <li>hair:  {item.hair_color}</li>
+                <li>eye color:   {item.eye_color}</li>
+                <li>birthTear: {item.birthYear}</li>
+              </ul>
+            </div>
+          // </div>
+        )
+      }
     })
     return content
   }

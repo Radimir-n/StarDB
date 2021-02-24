@@ -3,6 +3,7 @@ $body-color: #272b30;
 body {
   text-align: center;
   background-color: $body-color;
+  margin: 0;
 
   h1,h2 {
     color: white;
@@ -24,6 +25,7 @@ button {
   font-size: 16px;
   cursor: pointer;
   transition-duration: 0.4s;
+  z-index: 5;
 }
 button:hover {
   background-color: #0a0b0c;
@@ -32,4 +34,7 @@ ul{
   list-style:none;
   text-align: left;
   padding: 0,0,0,20px;
+}
+::-webkit-scrollbar{
+  display: none;
 }

@@ -5,7 +5,6 @@
   let _apiBase = 'https://swapi.dev/api'; // переменная с ссылкой на данные с сервера
 
   export async function getResource (url) {
-    console.log('ok')
     const res = await fetch(`${_apiBase}${url}`); // ждем res это промисы, передаем ссылку на данные с сервера
     if (!res.ok) { // содержит true если res.status содержит один из ОК-статусов(200-299) т.е. что-то не найденно (например id не правильный то ошибка 404)
       throw new Error(`Could not fetch ${url}` +  `received ${res.status}`) // обработка ошибки при проблемах сервера
@@ -64,12 +63,14 @@
     }
   }
   function _transformPerson (person) {
+    console.log(person)
     return {
       id: _extractId(person),
       name: person.name,
       gender: person.gender,
-      birthYear: person.birthYear,
-      eyeColor: person.eyeColor
+      birthYear: person.birth_year,
+      eye_color: person.eye_color,
+      hair_color: person.hair_color
     }
   }
 // }
