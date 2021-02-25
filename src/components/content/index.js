@@ -11,68 +11,37 @@ export const ComponentContent = ({activePage}) => {
   const dispatch = useDispatch()
   const [currentContent, setCurrentContent] = useState([])
   const [data, setData] = useState([])
+  const [personId, setPersonId] = useState([])
   const [loading, setLodingIndicator] =useState(true)
+
     function getPerson (){
       services
       .getAllPeople()
-      .then(setData)
+      .then((people)=>{
+        setData(people)
+      })
       .catch(setLodingIndicator(false));
     }
   useEffect(() => {
-
-    let czList = document.getElementsByClassName('contentZone')
-
-    // cz.style.zIndex = 4;
-    // console.log(cz)
-    // if(cz.length != 0){
-    //   for(let element in cz){
-    //     console.log(element)
-    //   }
-    // }
     getPerson()
-    console.log(loading)
-    // asyncProcess()
-  }, [loading])
+  }, [])
   useEffect(() => {
-    return () => {
-      getPerson()
-    };
-  }, []);
-    
-  //   cz.onclick = function() {
-  //     console.log(cz)
-  //   }
-
-    // document.onclick = function() {
-    //   if (leftMenuOpened && !clickWasInLeftMenu) {
-    //     toggleLeftMenu(false)
-    //   }
-    //   clickWasInLeftMenu = false
-    // }
+    console.log(personId)
+    // return () => {
+    //   getPerson()
+    // };
+  }, [personId]);
+  
 
 
   function onCreateContent(){
-
-    console.log(data)
     let index = 0
     let content = data.map(item => {
+      let id = services._extractId(item)
       index = index + 1
-      console.log(item.id)
-      let zIndex = 2
-      let setStyle = ''
-      if(currentContent > 0){
-        if(currentContent == index - 1){
-          zIndex = 4 
-          setStyle = "activeContent goCenter"
-        }
-        else{
-          zIndex = 0
-        }
-      }
       if(loading){
         return (
-          // <div className = {`contentBox`} key={item}>
-            <div  className={`contentZone ${setStyle}`}  key = {index} onClick={() => {setCurrentContent(index -1)}}style = {{zIndex: zIndex}}>
+            <div  className= "contentZone"   key = {index} onClick={() => {setCurrentContent(index -1)}}>
               {/* <ul> */}
                 <Spinner/>
               {/* </ul> */}
@@ -81,16 +50,19 @@ export const ComponentContent = ({activePage}) => {
       }
       else{
         return (
-          // <div className = {`contentBox`} key={item}>
-            <div className={`contentZone ${setStyle}`} key = {index} onClick={() => {setCurrentContent(index - 1)}}style = {{zIndex: zIndex}}>{item.name}
-              <ul>
+            <div className= "contentZone" key = {index} onClick={() => {setCurrentContent(index - 1); setPersonId(id)}}>
+              <div className="image">
+                <img src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}className = "image_center"/>
+                  
+              {/* <ul>
                 <li>gender: {item.gender}</li>
                 <li>hair:  {item.hair_color}</li>
                 <li>eye color:   {item.eye_color}</li>
-                <li>birthTear: {item.birthYear}</li>
-              </ul>
-            </div>
-          // </div>
+                <li>birthTear: {item.birth_year}</li>
+              </ul> */}
+              </div>
+              <h2 className = "person_name">{item.name}</h2>
+           </div>
         )
       }
     })
@@ -107,11 +79,8 @@ export const ComponentContent = ({activePage}) => {
   }
   else if(activePage == "Person"){
     return (
-      <div>
-        <div className='content'>
-            {contentZone}
-        </div>
-        <div className="transBox" onClick={() => {setCurrentContent(0)}}></div>
+      <div className='content'>
+          {contentZone}
       </div>
     )
   }

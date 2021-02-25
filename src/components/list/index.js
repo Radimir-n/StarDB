@@ -23,7 +23,7 @@ export const ComponentList = ({activePage}) => {
   else if(activePage == "Person"){
     return (
       <div className='content'>
-          <h2>List Person</h2>
+          {/* <h2>List Person</h2> */}
       </div>
     )
   }

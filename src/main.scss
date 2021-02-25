@@ -5,11 +5,6 @@ body {
   background-color: $body-color;
   margin: 0;
 
-  h1,h2 {
-    color: white;
-    font-size: 7vw;
-    margin-top: calc(50vh - 3.5vw);
-  }
 }
 button {
   background-color: $body-color;
