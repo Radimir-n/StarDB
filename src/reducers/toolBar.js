@@ -1,5 +1,5 @@
 const initialState = {
-  page: "People",
+  page: "Person",
 }
 
 export default function toolBar (state = initialState, action) {

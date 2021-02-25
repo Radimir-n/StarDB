@@ -4,7 +4,8 @@ import * as services from '../../services/swapi-service'
 import Spinner from '../spinner/spinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faQuestion, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import './content.scss'
+import './contentCard.scss'
+import './personContent.scss'
 export const ComponentContent = ({activePage, onActivePage}) => {
 
   const state = useSelector(state => state)
@@ -43,16 +44,14 @@ export const ComponentContent = ({activePage, onActivePage}) => {
     getData()
   }, [activePage])
   useEffect(() => {
-    console.log(personId)
     // return () => {
     //   getPerson()
     // };
-  }, [personId]);
+  }, []);
   
 
 
   function onCreateContent(data, img){
-    // console.log(data)
     let index = 0
     let content = data.map(item => {
       let id = services._extractId(item)
@@ -86,11 +85,19 @@ export const ComponentContent = ({activePage, onActivePage}) => {
     })
     return content
   }
+  function onCreatePersonData(page, id){
+    return(
+      <div className = "personContentZone">
+        {page}
+        {id}
+      </div>
+    )
+  }
   
   let contentPeople = onCreateContent(peopleData, 'characters')
   let contentPlanet = onCreateContent(planetsData, 'planets')
   let contentStarships = onCreateContent(starshipsData, 'starships')
-  console.log(planetsData)
+  let personContent = onCreatePersonData('Hello', 'woeld')
   if(activePage == "Planets"){
     return (
       <div className='content'>
@@ -115,7 +122,7 @@ export const ComponentContent = ({activePage, onActivePage}) => {
   else if(activePage == "Person"){
     return (
       <div className='content'>
-          <h2>Content Person</h2>
+          {personContent}
       </div>
     )
   }
