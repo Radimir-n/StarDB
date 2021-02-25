@@ -5,26 +5,43 @@ import Spinner from '../spinner/spinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faQuestion, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import './content.scss'
-export const ComponentContent = ({activePage}) => {
+export const ComponentContent = ({activePage, onActivePage}) => {
 
   const state = useSelector(state => state)
   const dispatch = useDispatch()
   const [currentContent, setCurrentContent] = useState([])
-  const [data, setData] = useState([])
+  const [peopleData, setPeopleData] = useState([])
+  const [planetsData, setPlanetsData] = useState([])
+  const [starshipsData, setStarshipsData] = useState([])
   const [personId, setPersonId] = useState([])
-  const [loading, setLodingIndicator] =useState(true)
+  const [loading, setLodingIndicator] =useState(false)
 
-    function getPerson (){
-      services
-      .getAllPeople()
-      .then((people)=>{
-        setData(people)
-      })
-      .catch(setLodingIndicator(false));
+    function getData(){
+      if(activePage == "Planets"){
+        services
+        .getAllPlanets()
+        .then((planets)=>{
+          setPlanetsData(planets)
+        }) 
+      }
+      else if(activePage == "People"){
+        services
+        .getAllPeople()
+        .then((people)=>{
+          setPeopleData(people)
+        })
+      }
+      else if(activePage == "Starships"){
+        services
+        .getAllStarships()
+        .then((starships)=>{
+          setStarshipsData(starships)
+        })
+      }
     }
   useEffect(() => {
-    getPerson()
-  }, [])
+    getData()
+  }, [activePage])
   useEffect(() => {
     console.log(personId)
     // return () => {
@@ -34,14 +51,15 @@ export const ComponentContent = ({activePage}) => {
   
 
 
-  function onCreateContent(){
+  function onCreateContent(data, img){
+    // console.log(data)
     let index = 0
     let content = data.map(item => {
       let id = services._extractId(item)
       index = index + 1
       if(loading){
         return (
-            <div  className= "contentZone"   key = {index} onClick={() => {setCurrentContent(index -1)}}>
+            <div  className= "contentZone" key = {index} onClick={() => {setCurrentContent(index -1)}}>
               {/* <ul> */}
                 <Spinner/>
               {/* </ul> */}
@@ -50,9 +68,9 @@ export const ComponentContent = ({activePage}) => {
       }
       else{
         return (
-            <div className= "contentZone" key = {index} onClick={() => {setCurrentContent(index - 1); setPersonId(id)}}>
+            <div className= "contentZone" key = {index} onClick={() => {setCurrentContent(index - 1); setPersonId(id); onActivePage("Person")}}>
               <div className="image">
-                <img src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}className = "image_center"/>
+                <img src={`https://starwars-visualguide.com/assets/img/${img}/${id}.jpg`}className = "image_center"/>
                   
               {/* <ul>
                 <li>gender: {item.gender}</li>
@@ -69,25 +87,35 @@ export const ComponentContent = ({activePage}) => {
     return content
   }
   
-  let contentZone = onCreateContent()
+  let contentPeople = onCreateContent(peopleData, 'characters')
+  let contentPlanet = onCreateContent(planetsData, 'planets')
+  let contentStarships = onCreateContent(starshipsData, 'starships')
+  console.log(planetsData)
   if(activePage == "Planets"){
     return (
       <div className='content'>
-          <h2>Content Planets</h2>
+          {contentPlanet}
       </div>
     )
   }
-  else if(activePage == "Person"){
+  else if(activePage == "People"){
     return (
       <div className='content'>
-          {contentZone}
+          {contentPeople}
       </div>
     )
   }
   else if(activePage == "Starships"){
     return (
       <div className='content'>
-          <h2>Content Starships</h2>
+          {contentStarships}
+      </div>
+    )
+  }
+  else if(activePage == "Person"){
+    return (
+      <div className='content'>
+          <h2>Content Person</h2>
       </div>
     )
   }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import {ToolBar} from '../containers/toolBar/index'
 import {Content} from '../containers/content/index'
-import {List} from '../containers/list/index'
 
 export const App = () => {
 
@@ -21,7 +20,6 @@ export const App = () => {
     <div className='app'>
       <ToolBar/>
       <Content/>
-      <List/>
     </div>
   )
 

@@ -18,7 +18,7 @@
   } 
   export async function getAllPlanets(){  
     const res = await getResource (`/planets/`); 
-    return res.results.map(_transformPlanet) 
+    return res.results
   } 
   export async function getPlanet(id){
     const planet = await getResource (`/planets/${id}/`);
@@ -26,7 +26,7 @@
   } 
   export async function getAllStarships () { 
     const res = await getResource (`/starships/`);
-    return res.results.map(_transformStarship) 
+    return res.results
   } 
   export async function getStarship (id){ 
     const starships = getResource (`/starships/${id}/`);
