@@ -10,9 +10,9 @@ export const ComponentToolBar = ({onActivePage}) => {
       <div className = "logo">
           <img src={logo} />
       </div>
-      <button onClick={() => onActivePage("Planets")}>Planets</button>
-      <button onClick={() => onActivePage("People")}>People</button>
-      <button onClick={() => onActivePage("Starships")}>Starships</button>
+      <button onClick={() => onActivePage("planets")}>Planets</button>
+      <button onClick={() => onActivePage("characters")}>People</button>
+      <button onClick={() => onActivePage("starships")}>Starships</button>
     </div>
   )
 

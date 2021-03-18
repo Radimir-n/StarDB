@@ -28,7 +28,20 @@ button:hover {
 ul{
   list-style:none;
   text-align: left;
-  padding: 0,0,0,20px;
+  padding: 0px;
+}
+h1{
+  padding-left: 40px;
+}
+li{
+  padding-left: 40px;
+  color: rgba(0,0,0,.54);
+  line-height: 1.5;
+}
+a{
+  text-decoration: none;
+  color: #03A0E9;
+  
 }
 ::-webkit-scrollbar{
   // display: none;

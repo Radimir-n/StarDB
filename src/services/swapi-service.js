@@ -4,7 +4,7 @@
   export async function getResource (url) {
     const res = await fetch(`${_apiBase}${url}`); 
     if (!res.ok) { 
-      throw new Error(`Could not fetch ${url}` +  `received ${res.status}`) // обработка ошибки при проблемах сервера
+      throw new Error(`Could not fetch ${url}` +  `received ${res.status}`)
     }
       return await res.json();
   }
@@ -33,6 +33,6 @@
     return  _transformStarship(starships)
   } 
   export function _extractId (item)  { 
-    const idRegExp = /\/([0-9]*)\/$/; // это регулярное выражение оно пишется: (/тут выражение\) $ находит конец строки [0-9]* это значения id которые могут быть круглые скобки оборачивают отдельное значение 
-    return item.url.match(idRegExp)[1] // указываем путь к url где будет использоваться решулярное выражение [1] группа это обращение к ([0-9])
+    const idRegExp = /\/([0-9]*)\/$/; 
+    return item.match(idRegExp)[1]
   }

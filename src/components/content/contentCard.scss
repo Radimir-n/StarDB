@@ -14,8 +14,8 @@ $body-color: #272b30;
     border: 1px solid rgba(0, 0, 0, 0.6);
     width: 350px;
     height: 425px;
-    margin:20px;
-    color: #e7e2e2;
+    margin:10px;
+    color: #c8c8c8;
     background-color: #1c1e22;
     border-radius: 4px;
     cursor: pointer;
@@ -31,14 +31,6 @@ $body-color: #272b30;
 }
 .contentZone:hover {
     transform: scale(1.07); 
-}
-.transBox {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index:1.1;
-    // backdrop-filter: blur(5px);
 }
 .passiveContent {
   left: 430px;
