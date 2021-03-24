@@ -13,6 +13,7 @@ export const ComponentToolBar = ({onActivePage}) => {
       <button onClick={() => onActivePage("planets")}>Planets</button>
       <button onClick={() => onActivePage("characters")}>People</button>
       <button onClick={() => onActivePage("starships")}>Starships</button>
+      <button onClick={() => onActivePage("films")}>Films</button>
     </div>
   )
 

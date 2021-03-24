@@ -31,7 +31,11 @@
   export async function getStarship (id){ 
     const starships = getResource (`/starships/${id}/`);
     return  _transformStarship(starships)
-  } 
+  }
+  export async function getFilms(){
+    const res =  await getResource (`/films/`); 
+    return res.results
+  }  
   export function _extractId (item)  { 
     const idRegExp = /\/([0-9]*)\/$/; 
     return item.match(idRegExp)[1]
