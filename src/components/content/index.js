@@ -87,14 +87,20 @@ export const ComponentContent = ({activePage, onActivePage}) => {
   function onCreatePersonData(data, id){
     let person_data = data[0].find(item => services._extractId(item.url) == id);
     let list = []
-    let name = undefined
-    if(person_data.name){
-      name = person_data.name
-    }
-    else{
+    let name = person_data.name
+    if(!name){
       name = person_data.title
     }
+    let dopInfo = []
     if(data[1] == 'characters'){
+      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      var Starships = setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
+      dopInfo = [
+        <div key = 'dopInfo' className = 'dopInformation'>
+              {Films}
+              {Starships}
+        </div> 
+      ]
       let planets_data = [
         planetsData,
         services._extractId(person_data.homeworld)
@@ -122,6 +128,14 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'planets'){
+      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      let Residents = setDopInfo(person_data.residents, 'Residents', peopleData,'characters')
+      dopInfo = [
+        <div key = 'dopInfo' className = 'dopInformation'>
+              {Films}
+              {Residents}
+        </div> 
+      ]
       list = [
         <div key = 'planets'>
               <li>population: {person_data.population}</li>
@@ -135,6 +149,14 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'starships'){
+      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      let Pilots = setDopInfo(person_data.pilots, 'Related Films', peopleData,'characters')
+      dopInfo = [
+        <div key = 'dopInfo' className = 'dopInformation'>
+              {Films}
+              {Pilots}
+        </div> 
+      ]
       list = [
         <div key = 'starship'>
             <li>Model: {person_data.model}</li>
@@ -151,6 +173,17 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'films'){
+      let Characters = setDopInfo(person_data.characters, 'Related Characters', peopleData,'characters')
+      let Planets = setDopInfo(person_data.planets, 'Related Planets', planetsData,'planets')
+      let Starships = setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
+      console.log(person_data)
+      dopInfo = [
+        <div key = 'dopInfo' className = 'dopInformation'>
+              {Characters}
+              {Planets}
+              {Starships}
+        </div> 
+      ]
       list = [
         <div key = 'planet'>
             <li>Release date: {person_data.release_date}</li>
@@ -163,92 +196,67 @@ export const ComponentContent = ({activePage, onActivePage}) => {
     }
       return(
         <div className='parentClass'>
-          <div className = "personContentZone">
-            <div className="personImage">
-              <img src={`https://starwars-visualguide.com/assets/img/${data[1]}/${id}.jpg`} className = "personImageCenter"/>
-            </div>
-            <div className="personData">
-              <ul>
-              <h1>{name}</h1>
-              <hr></hr>
-                {list}
-              </ul>
-            </div>
-          </div>
-        </div>
-    )   
-  }
-  function setDopInfo(data){
-    let film = data.map(item => {
-      let id = services._extractId(item)
-      let currentFilm = filmsData.find(el => el.url == item)
-      return (
-        <div key = {id} className = 'film_image'>
-          <ul>
-            <img src={`https://starwars-visualguide.com/assets/img/films/${id}.jpg`} className = "image_film"/>
-            <a href="#" >{currentFilm.title}</a>
-          </ul>
-        </div>
-        
-      )
-    })
-    let film_list = [
-      <div key = 'films' className = 'personFilms'>
-          <h3>Related films</h3>
-          <hr></hr>
-          <div key ='list_films' className = 'film_list'>
-            {film}
-          </div>
-      </div>
-    ]
-    return film_list
-  }
-  function character_data(data, id){
-    let person_data = data[0].find(item => services._extractId(item.url) == id);
-    let planets_data = [
-      planetsData,
-      services._extractId(person_data.homeworld)
-    ]
-    let planet_link = [
-      planets_data[0],
-      'planets'
-    ]
-    let homeworld =  planets_data[0].find(item => person_data.homeworld == item.url)
-    if (!homeworld){
-      homeworld = planets_data[0][0]
-    }
-    let planet_id =  services._extractId(homeworld.url)
-    let people_list = [
-      <div key = 'people'>
-            <li>gender: {person_data.gender}</li>
-            <li>birthTear: {person_data.birth_year}</li>
-            <li>hair: {person_data.hair_color}</li>
-            <li>eye color: {person_data.eye_color}</li>
-            <li>mass: {person_data.mass}</li>
-            <li>height: {person_data.height}</li>
-            <li>homeworld: <a href="#" onClick={() => {onCreatePersonData(planet_link,planet_id),setPersonId(planet_id),getActivePageData(planet_link)}}>{homeworld.name}</a> </li>
-      </div>
-    ]
-    let dopInfo = setDopInfo(person_data.films)
-      return(
-        <div className='parentClass'>
             <div className = "personContentZone">
               <div className="personImage">
                 <img src={`https://starwars-visualguide.com/assets/img/${data[1]}/${id}.jpg`} className = "personImageCenter"/>
               </div>
               <div className="personData">
                 <ul>
-                <h1>{person_data.name}</h1>
+                <h1>{name}</h1>
                 <hr></hr>
-                  {people_list}
+                  {list}
                 </ul>
               </div>
             </div>
-            <div key = 'dopInfo' className = 'dopInformation'>
-              {dopInfo}
-            </div> 
-        </div> 
-    )     
+            {dopInfo}
+        </div>
+    )   
+  }
+  function setDopInfo(data,title, dataType,page){
+    let objects = data.map(item => {
+      let id = services._extractId(item)
+      let currentObject = dataType.find(el => el.url == item)
+      let objects_data = [
+        dataType,
+        page
+      ]
+      console.log(currentObject)
+      // let homeworld =  planets_data[0].find(item => person_data.homeworld == item.url)
+      // let object_id =  services._extractId(currentObject.url)
+      let name = undefined
+      if(currentObject){
+        var object_id =  services._extractId(currentObject.url)
+        if(currentObject.name){
+          name = currentObject.name
+        }else{
+          name = currentObject.title
+        }
+      }
+      if(currentObject){
+        return (
+          <div key = {id} className = 'object_image'>
+            <ul>
+              <img src={`https://starwars-visualguide.com/assets/img/${page}/${id}.jpg`} className = "image_object"/>
+              <a href="#" onClick={() => {onCreatePersonData(objects_data,object_id),setPersonId(object_id),getActivePageData(objects_data)}}>{name}</a>
+            </ul>
+          </div>
+          
+        )
+      }else{
+        return
+      }
+      
+    })
+    let list = [
+      <div key = {title} className = 'personObject'>
+          <h3>{title}</h3>
+          <hr></hr>
+          <div key ='list_films' className = 'object_list'>
+            {objects}
+          </div>
+      </div>
+    ]
+    return list
   }
   let content = undefined
   if(activePage == "planets"){
