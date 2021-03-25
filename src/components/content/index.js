@@ -176,7 +176,6 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       let Characters = setDopInfo(person_data.characters, 'Related Characters', peopleData,'characters')
       let Planets = setDopInfo(person_data.planets, 'Related Planets', planetsData,'planets')
       let Starships = setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
-      console.log(person_data)
       dopInfo = [
         <div key = 'dopInfo' className = 'dopInformation'>
               {Characters}
@@ -220,9 +219,6 @@ export const ComponentContent = ({activePage, onActivePage}) => {
         dataType,
         page
       ]
-      console.log(currentObject)
-      // let homeworld =  planets_data[0].find(item => person_data.homeworld == item.url)
-      // let object_id =  services._extractId(currentObject.url)
       let name = undefined
       if(currentObject){
         var object_id =  services._extractId(currentObject.url)
