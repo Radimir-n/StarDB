@@ -3,10 +3,11 @@ $body-color: #272b30;
 .content {
     display: flex;
     flex-wrap: wrap;
-    // position: relative;
     width: 100%;
-    justify-content: space-between;
-    // max-height: 100vh;
+    margin-left: 20px;
+}
+.content:nth-last-child(-n+2) {
+  justify-content:start;
 }
 .contentZone{
     display: block;
@@ -21,9 +22,6 @@ $body-color: #272b30;
     cursor: pointer;
     transition-duration: 0.4s;
     padding-top: 20px;
-}
-.contentZone:last-child{
-  justify-content:start;
 }
 .contentZone li{
     border-bottom: 1px solid white; 

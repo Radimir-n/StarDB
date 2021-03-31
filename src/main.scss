@@ -52,6 +52,9 @@ a{
   color: #03A0E9;
   
 }
+button:active, button:focus {
+  outline: none !important;
+}
 ::-webkit-scrollbar{
   // display: none;
 }
