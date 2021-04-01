@@ -8,7 +8,6 @@ import './contentCard.scss'
 import './personContent.scss'
 export const ComponentContent = ({activePage, onActivePage}) => {
 
-  const [currentContent, setCurrentContent] = useState([])
   const [peopleData, setPeopleData] = useState([])
   const [planetsData, setPlanetsData] = useState([])
   const [starshipsData, setStarshipsData] = useState([])
@@ -18,28 +17,25 @@ export const ComponentContent = ({activePage, onActivePage}) => {
   const [page, getActivePageData] = useState([])
   const [content, setActiveContent] = useState(null)
 
-
   useEffect(() => {
     services.getAllPlanets()
     .then(data=>{
       setPlanetsData(data)
-      setLodingIndicator(false)
     })
     services.getAllPeople()
     .then(data=>{
       setPeopleData(data)
-      setLodingIndicator(false)
     })
     services.getAllStarships()
     .then(data=>{
       setStarshipsData(data)
-      setLodingIndicator(false)
     })
     services.getFilms()
     .then(data=>{
       setFilmsData(data)
       setLodingIndicator(false)
     })
+    
   }, [])
 
   useEffect(()=>{
@@ -48,14 +44,7 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       setActiveContent(data)
     })
   },[peopleData])
-  // return (
-  //   <div className='content'>
-  //     <Spinner
-  //       loading = {loading}
-  //     />
-  //       {content}
-  //   </div>
-  // )
+
   useEffect(()=>{
     let activeData = undefined
     if(activePage != "Person"){
@@ -75,13 +64,19 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       .then((data)=>{
         setActiveContent(data)
       })
-    }else{
-      console.log(page, personId)
-      onCreatePersonData(page, personId)
     }
   },[activePage])
 
-   async function onCreateContent(data, img){
+  useEffect(()=>{
+    if(activePage == 'Person'){
+      onCreatePersonData(page, personId)
+      .then((data)=>{
+      setActiveContent(data)
+      })
+    }
+  },[page,personId])
+
+  async function onCreateContent(data, img){
     let index = 0
     let personData = [
       data,
@@ -98,44 +93,33 @@ export const ComponentContent = ({activePage, onActivePage}) => {
         name = item.name
       }
       index = index + 1
-      if(loading){
-        const newItem = <div  className= "contentZone" key = {index} onClick={() => {setCurrentContent(index -1)}}>
-                <Spinner/>
-            </div>
-        arrResult = [...arrResult, newItem]
-      }
-      else{
         let response = await fetch('https://starwars-visualguide.com/assets/img/'+ img+'/'+ id + '.jpg')
         let result = `https://starwars-visualguide.com/assets/img/${img}/${id}.jpg`
         if(response.status == 404){
           result = 'https://starwars-visualguide.com/assets/img/big-placeholder.jpg'
         }
-        
-        const newItem = <div className= "contentZone" key = {index} onClick={() => {setCurrentContent(index - 1); setPersonId(id); onActivePage("Person"); getActivePageData(personData)}}>
+        const newItem = <div className= "contentZone" key = {index} onClick={() => {setPersonId(id); onActivePage("Person"); getActivePageData(personData)}}>
               <div className="image">
                 <img src={result}className = "image_center"/>
               </div>
               <h2 className = "person_name">{name}</h2>
            </div>
         arrResult = [...arrResult, newItem]
-            
-
-      }
     }
     return arrResult
   }
-
-  function onCreatePersonData(data, id){
+  async function onCreatePersonData(data, id){
     let person_data = data[0].find(item => services._extractId(item.url) == id);
     let list = []
     let name = person_data.name
+    let arrResult = []
     if(!name){
       name = person_data.title
     }
     let dopInfo = []
     if(data[1] == 'characters'){
-      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
-      var Starships = setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
+      let Films = await setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      var Starships = await setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
       dopInfo = [
         <div key = 'dopInfo' className = 'dopInformation'>
               {Films}
@@ -169,8 +153,8 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'planets'){
-      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
-      let Residents = setDopInfo(person_data.residents, 'Residents', peopleData,'characters')
+      let Films = await setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      let Residents = await setDopInfo(person_data.residents, 'Residents', peopleData,'characters')
       dopInfo = [
         <div key = 'dopInfo' className = 'dopInformation'>
               {Films}
@@ -190,8 +174,8 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'starships'){
-      let Films = setDopInfo(person_data.films, 'Related Films', filmsData,'films')
-      let Pilots = setDopInfo(person_data.pilots, 'Related Films', peopleData,'characters')
+      let Films = await setDopInfo(person_data.films, 'Related Films', filmsData,'films')
+      let Pilots = await setDopInfo(person_data.pilots, 'Related Films', peopleData,'characters')
       dopInfo = [
         <div key = 'dopInfo' className = 'dopInformation'>
               {Films}
@@ -214,9 +198,9 @@ export const ComponentContent = ({activePage, onActivePage}) => {
       ]
     }
     if(data[1] == 'films'){
-      let Characters = setDopInfo(person_data.characters, 'Related Characters', peopleData,'characters')
-      let Planets = setDopInfo(person_data.planets, 'Related Planets', planetsData,'planets')
-      let Starships = setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
+      let Characters = await setDopInfo(person_data.characters, 'Related Characters', peopleData,'characters')
+      let Planets = await setDopInfo(person_data.planets, 'Related Planets', planetsData,'planets')
+      let Starships = await setDopInfo(person_data.starships, 'Related Starships', starshipsData,'starships')
       dopInfo = [
         <div key = 'dopInfo' className = 'dopInformation'>
               {Characters}
@@ -234,11 +218,15 @@ export const ComponentContent = ({activePage, onActivePage}) => {
         </div>
       ]
     }
-      return(
-        <div className='parentClass'>
+    let response = await fetch('https://starwars-visualguide.com/assets/img/'+ data[1]+'/'+ id + '.jpg')
+        let result = `https://starwars-visualguide.com/assets/img/${data[1]}/${id}.jpg`
+        if(response.status == 404){
+          result = 'https://starwars-visualguide.com/assets/img/big-placeholder.jpg'
+        }
+      const newItem = <div key = 'parentClass' className='parentClass'>
             <div className = "personContentZone">
               <div className="personImage">
-                <img src={`https://starwars-visualguide.com/assets/img/${data[1]}/${id}.jpg`} className = "personImageCenter"/>
+                <img src={result} className = "personImageCenter"/>
               </div>
               <div className="personData">
                 <ul>
@@ -250,10 +238,13 @@ export const ComponentContent = ({activePage, onActivePage}) => {
             </div>
             {dopInfo}
         </div>
-    )   
+    
+    arrResult = [...arrResult, newItem]
+    return arrResult   
   }
-  function setDopInfo(data,title, dataType,page){
-    let objects = data.map(item => {
+  async function setDopInfo(data,title, dataType,page){
+    let objects = []
+    for(let item of data){
       let id = services._extractId(item)
       let currentObject = dataType.find(el => el.url == item)
       let objects_data = [
@@ -270,22 +261,22 @@ export const ComponentContent = ({activePage, onActivePage}) => {
         }
       }
       if(currentObject){
-        return (
-          <div key = {id} className = 'object_image'>
+        let response = await fetch('https://starwars-visualguide.com/assets/img/'+ page+'/'+ id + '.jpg')
+        let result = `https://starwars-visualguide.com/assets/img/${page}/${id}.jpg`
+        if(response.status == 404){
+          result = 'https://starwars-visualguide.com/assets/img/big-placeholder.jpg'
+        }
+         const newItem = <div key = {id} className = 'object_image'>
             <ul>
-              <img src={`https://starwars-visualguide.com/assets/img/${page}/${id}.jpg`} className = "image_object"/>
+              <img src={result} className = "image_object"/>
               <div className = 'link_name'>
               <a href="#" onClick={() => {onCreatePersonData(objects_data,object_id),setPersonId(object_id),getActivePageData(objects_data)}}>{name}</a>
               </div>
             </ul>
           </div>
-          
-        )
-      }else{
-        return
+        objects = [...objects, newItem]
       }
-      
-    })
+    }
     let list = [
       <div key = {title} className = 'personObject'>
           <h3>{title}</h3>
@@ -297,12 +288,21 @@ export const ComponentContent = ({activePage, onActivePage}) => {
     ]
     return list
   }
-  // let content = undefined
-  return(
-    <div className='content'>
-        {content}
-    </div>
-  )
-
+  if(loading){
+    return(
+      <div className='content'>
+        <Spinner
+          loading = {loading}
+        />
+      </div>
+    )
+  }
+  else{
+    return(
+      <div className='content'>
+          {content}
+      </div>
+    )
+  }
 
 }
