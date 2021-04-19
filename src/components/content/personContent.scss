@@ -26,7 +26,7 @@
 .dopInformation{
     display: flex;
     position: relative;
-    height: 300px;
+    height: 320px;
     width: 103%;
     top: 50px;
     left: -35px;
@@ -60,7 +60,9 @@
     display: flex;
     width: 40px;
     height: 40px; 
-    padding-left: 40px;
+    padding-left: 35px;
+    padding-right: 10px;
+    padding-bottom: 40px;
 }
 .image_object{
     width: 100%;
